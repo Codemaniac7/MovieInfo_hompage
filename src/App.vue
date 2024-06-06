@@ -1,26 +1,126 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Navbar />
+  <Event :text="text" />
+  <SearchBar />
+  <Movies
+    :data="data"
+    @openModal="
+      isModal = true;
+      selectedMovie = $event;
+    "
+    @increaseLike="increaseLike($event)"
+  />
+  <Modal
+    :data="data"
+    :isModal="isModal"
+    :selectedMovie="selectedMovie"
+    @closeModal="isModal = false"
+  />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import data from "./assets/movies";
+import Navbar from "./components/Navbar.vue";
+import Modal from "./components/Modal.vue";
+import Event from "./components/Event.vue";
+import Movies from "./components/Movies.vue";
+import SearchBar from "./components/SearchBar.vue";
 
+console.log(data);
 export default {
-  name: 'App',
+  name: "App",
+  data() {
+    return {
+      isModal: false,
+      data: data,
+      selectedMovie: 0,
+      text: "NETFLIX 강렬한 운명의 드라마, 경기크리처!!",
+    };
+  },
+  methods: {
+    increaseLike(i) {
+      this.data[i].like += 1;
+    },
+  },
   components: {
-    HelloWorld
-  }
-}
+    Navbar: Navbar,
+    Modal: Modal,
+    Event: Event,
+    Movies: Movies,
+    SearchBar: SearchBar,
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1,
+h2,
+h3 {
+  margin-bottom: 1rem;
+}
+
+p {
+  margin-bottom: 0.5rem;
+}
+
+button {
+  margin-right: 10px;
+  margin-top: 1rem;
+}
+
+.item {
+  width: 100%;
+  border: 1px solid #ccc;
+  display: flex;
+  margin-bottom: 20px;
+  padding: 1rem;
+}
+
+.item figure {
+  width: 30%;
+  margin-right: 1rem;
+}
+
+.item img {
+  width: 100%;
+}
+
+.item .info {
+  width: 100%;
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal .inner {
+  background: #fff;
+  width: 80%;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.bg-yellow {
+  background: gold;
+  padding: 10px;
 }
 </style>
